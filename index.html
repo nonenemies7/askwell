@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI FAQ Assistants for Small Businesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+   --paper: #F2EFE7;
+   --ink: #202521;
+   --ink-soft: #565f57;
+   --teal: #2F5D50;
+   --teal-deep: #1E3F36;
+   --coral: #C4623E;
+   --line: #d8d2c3;
+   --bubble-bot: #FFFFFF;
+   --bubble-user: #2F5D50;
+   --radius: 4px;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+     --paper: #1B1E1B;
+     --ink: #EDEAE1;
+     --ink-soft: #a9b0a6;
+     --teal: #6FA391;
+     --teal-deep: #8fc2ae;
+     --bubble-bot: #262a26;
+     --line: #3a3f3a;
+    }
+  }
+  :root[data-theme="dark"] {
+   --paper: #1B1E1B;
+   --ink: #EDEAE1;
+   --ink-soft: #a9b0a6;
+   --teal: #6FA391;
+   --teal-deep: #8fc2ae;
+   --bubble-bot: #262a26;
+   --line: #3a3f3a;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter',apple-system, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  header.top {
+    padding: 20px 0 0;
+  }
+  .top .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-family: 'Zilla Slab', serif; font-weight: 700; font-size: 1.05rem; }
+  .brand span { color: var(--teal); }
+
+  .hero { padding: 56px 0 20px; }
+  h1 {
+    font-family: 'Zilla Slab', serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    max-width: 14ch;
+  }
+  .sub {
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 0 0 36px;
+  }
+
+  /* Chat demo */
+  .demo-frame {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bubble-bot);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .demo-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--teal-deep);
+    color: #fff;
+  }
+  :root[data-theme="dark"] .demo-head, @media (prefers-color-scheme: dark) { }
+  .demo-head .dot { width: 9px; height: 9px; border-radius: 50%; background: #8fd6bd; }
+  .demo-head .who { font-weight: 600; font-size: 0.92rem; }
+  .demo-head .sub2 { font-size: 0.78rem; opacity: 0.8; margin-left: auto; }
+
+  #log {
+    padding: 18px 16px;
+    height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--paper);
+  }
+  .msg { max-width: 82%; padding: 9px 13px; border-radius: 14px; font-size: 0.93rem; }
+  .msg.bot { background: var(--bubble-bot); border: 1px solid var(--line); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.user { background: var(--bubble-user); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+  .quick { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 14px; background: var(--paper); }
+  .quick button {
+    font-family: inherit; font-size: 0.82rem; padding: 7px 12px;
+    border-radius: 999px; border: 1px solid var(--line); background: var(--bubble-bot);
+    color: var(--ink); cursor: pointer;
+  }
+  .quick button:hover { border-color: var(--teal); }
+
+  .input-row { display: flex; border-top: 1px solid var(--line); background: var(--bubble-bot); }
+  #inputBox {
+    flex: 1; border: none; padding: 13px 14px; font-family: inherit; font-size: 0.93rem;
+    background: transparent; color: var(--ink); outline: none;
+  }
+  #sendBtn {
+    border: none; background: var(--teal); color: #fff; padding: 0 20px;
+    font-family: inherit; font-weight: 600; cursor: pointer; font-size: 0.9rem;
+  }
+  #sendBtn:hover { background: var(--teal-deep); }
+
+  .caption { font-size: 0.82rem; color: var(--ink-soft); margin-top: 10px; }
+
+  /* Steps */
+  .steps { padding: 56px 0 8px; }
+  h2 { font-family: 'Zilla Slab', serif; font-size: 1.5rem; margin: 0 0 26px; }
+  .step { display: flex; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .step:last-child { border-bottom: 1px solid var(--line); }
+  .num { font-family: 'Zilla Slab', serif; font-weight: 700; color: var(--teal); font-size: 1.1rem; width: 28px; flex-shrink: 0; }
+  .step h3 { margin: 0 0 4px; font-size: 1rem; }
+  .step p { margin: 0; color: var(--ink-soft); font-size: 0.93rem; max-width: 48ch; }
+
+  /* Offer */
+  .offer { padding: 56px 0 70px; }
+  .offer-box {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px 26px;
+    background: var(--bubble-bot);
+  }
+  .offer-box .price { font-family: 'Zilla Slab', serif; font-size: 1.8rem; font-weight: 700; }
+  .offer-box .price small { font-family: 'Inter'; font-size: 0.95rem; font-weight: 500; color: var(--ink-soft); }
+  .offer-box ul { padding-left: 18px; margin: 14px 0 20px; color: var(--ink-soft); font-size: 0.93rem; }
+  .offer-box li { margin-bottom: 6px; }
+  .cta {
+    display: inline-block; background: var(--coral); color: #fff; text-decoration: none;
+    padding: 12px 22px; border-radius: 6px; font-weight: 600; font-size: 0.95rem;
+  }
+  .cta:hover { opacity: 0.92; }
+  .note { font-size: 0.8rem; color: var(--ink-soft); margin-top: 14px; }
+
+  footer { border-top: 1px solid var(--line); padding: 24px 0 40px; }
+  footer .wrap { font-size: 0.82rem; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap"><div class="brand">Ask<span>Well</span></div></div></header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>I build AI chat assistants that answer your customers' questions day or night.</h1>
+    <p class="sub">A small, working example below, built for a fictional bakery. Ask it something a customer might ask.</p>
+
+    <div class="demo-frame">
+      <div class="demo-head">
+        <div class="dot"></div>
+        <div class="who">Maple &amp; Co. Bakery Assistant</div>
+        <div class="sub2">demo</div>
+      </div>
+      <div id="log"></div>
+      <div class="quick">
+        <button type="button" data-q="What are your hours?">Hours?</button>
+        <button type="button" data-q="Do you do custom cakes?">Custom cakes?</button>
+        <button type="button" data-q="Do you deliver?">Delivery?</button>
+        <button type="button" data-q="Do you have gluten free options?">Gluten free?</button>
+      </div>
+      <div class="input-row">
+        <input id="inputBox" type="text" placeholder="Type a question…" autocomplete="off">
+        <button id="sendBtn" type="button">Send</button>
+      </div>
+    </div>
+    <p class="caption">This runs entirely in your browser for the demo. A real build connects to your actual hours, menu, and policies, and can hand off to you for anything it can't answer.</p>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="step">
+      <div class="num">1</div>
+      <div><h3>You send me your FAQs</h3><p>Hours, pricing, policies, whatever customers keep asking even a messy list is fine.</p></div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div><h3>I build and test it</h3><p>Usually ready in 3–5 days. You get a link to try it before it goes anywhere near your customers.</p></div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div><h3>It goes on your site or page</h3><p>One line of code, or I can help you add it. It keeps working after I'm done no subscription required.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="offer">
+  <div class="wrap">
+    <div class="offer-box">
+      <div class="price">$150 <small>one-time setup</small></div>
+      <ul>
+        <li>Custom-trained on your business's real questions</li>
+        <li>Delivered in 3–5 days</li>
+        <li>One round of edits included</li>
+        <li>You own it no ongoing fee to me</li>
+      </ul>
+      <a class="cta" href="mailto:nonenemies@gmail.com?subject=ASKWELL%20Business%20Inquiry&body=Hi%20ASKWELL%2C%0A%0AI%27m%20interested%20in%20an%20AI%20chat%20assistant%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0ABusiness%20type%3A%20%0AWhat%20I%27d%20like%20help%20with%3A%20%0A%0AThanks!">Message me about your business</a>
+      <p class="note">Contact ASKWELL directly by email: nonenemies@gmail.com</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong>ASKWELL</strong><br>
+    Email: <a href="mailto:nonenemies@gmail.com">nonenemies@gmail.com</a><br>
+    AI chat assistants for small businesses.
+  </div>
+</footer>
+
+<script>
+(function(){
+  const log = document.getElementById('log');
+  const input = document.getElementById('inputBox');
+  const sendBtn = document.getElementById('sendBtn');
+
+  const rules = [
+    { k: ['hour','open','close','time'], a: "We're open Tuesday–Sunday, 8am–6pm. Closed Mondays." },
+    { k: ['custom','cake','birthday','wedding'], a: "Yes! Custom cakes need 5 days notice. Send us a photo of the style you like and we'll quote it." },
+    { k: ['deliver','delivery','ship'], a: "We deliver locally within 8km for a flat $6 fee, free over $45." },
+    { k: ['gluten', 'allergy', 'allergies', 'vegan', 'dairy'], a: "We have gluten-free and vegan options daily — just ask at the counter or mention it when ordering." },
+    { k: ['price', 'cost', 'how much'], a: "Prices start at $4 for pastries and $28 for a small custom cake — happy to quote anything specific." },
+    { k: ['location', 'address', 'where'], a: "We're at 12 Maple Street. Look for the green awning!" },
+  ];
+
+  function reply(text){
+    const lower = text.toLowerCase();
+    for (const r of rules){
+      if (r.k.some(word => lower.includes(word))) return r.a;
+    }
+    return "Good question,I don't have that one in the demo yet, but in a real build this would be trained on the business's actual answers, or hand off to a real person.";
+  }
+
+  function addMsg(text, who){
+    const div = document.createElement('div');
+    div.className = 'msg ' + who;
+    div.textContent = text;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function send(text){
+    if (!text.trim()) return;
+    addMsg(text, 'user');
+    input.value = '';
+    setTimeout(() => addMsg(reply(text), 'bot'), 380);
+  }
+
+  sendBtn.addEventListener('click', () => send(input.value));
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') send(input.value); });
+  document.querySelectorAll('.quick button').forEach(btn => {
+    btn.addEventListener('click', () => send(btn.dataset.q));
+  });
+
+  addMsg("Hi! I'm the assistant for Maple & Co. Bakery. Ask me about hours, custom cakes, delivery, or allergies.", 'bot');
+})();
+</script>
+
+</body>
+</html>
